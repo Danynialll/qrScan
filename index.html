@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan QR Code</title>
+    <style>
+        #reader {
+            width: 300px;
+            margin: auto;
+        }
+        #result {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            color: green;
+        }
+    </style>
+    <!-- Html5Qrcode library -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.10/minified/html5-qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+    <h2 style="text-align: center;">Scan Your Loyalty QR Code</h2>
+
+    <div id="reader"></div>
+    <div id="result"></div>
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            document.getElementById("result").innerHTML = `Scanned: ${decodedText}`;
+            html5QrcodeScanner.clear(); // Stop scanning after first scan
+        }
+
+        function onScanFailure(error) {
+            // Optionally ignore errors or log them
+        }
+
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", {
+                fps: 10,
+                qrbox: 250
+            },
+            /* verbose= */ false);
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+
+</body>
+</html>
