@@ -1,48 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Scan QR Code</title>
-    <style>
-        #reader {
-            width: 300px;
-            margin: auto;
-        }
-        #result {
-            text-align: center;
-            font-size: 1.2rem;
-            margin-top: 20px;
-            color: green;
-        }
-    </style>
-    <!-- Html5Qrcode library -->
-    <script src="https://unpkg.com/html5-qrcode@2.3.10/minified/html5-qrcode.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode"></script>
+  <meta charset="UTF-8">
+  <title>Code 39 Scanner</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+  <style>
+    #scanner-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 30px auto;
+      text-align: center;
+    }
+
+    #scanner {
+      width: 100%;
+      border: 2px solid #007bff;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-    <h2 style="text-align: center;">Scan Your Loyalty QR Code</h2>
+<div id="scanner-container">
+  <h2>Code 39 Barcode Scanner</h2>
+  <div id="scanner"></div>
+  <div id="result">Waiting for scan...</div>
+</div>
 
-    <div id="reader"></div>
-    <div id="result"></div>
-    <script>
-        function onScanSuccess(decodedText, decodedResult) {
-            document.getElementById("result").innerHTML = `Scanned: ${decodedText}`;
-            html5QrcodeScanner.clear(); // Stop scanning after first scan
-        }
+<script>
+  Quagga.init({
+    inputStream: {
+      type: "LiveStream",
+      target: document.querySelector('#scanner'),
+      constraints: {
+        width: 600,
+        height: 400,
+        facingMode: "environment"
+      },
+    },
+    decoder: {
+      readers: ["code_39_reader"] // Use Code 39
+    }
+  }, function (err) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    Quagga.start();
+  });
 
-        function onScanFailure(error) {
-            // Optionally ignore errors or log them
-        }
-
-        let html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader", {
-                fps: 10,
-                qrbox: 250
-            },
-            /* verbose= */ false);
-        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-    </script>
+  Quagga.onDetected(function (data) {
+    const code = data.codeResult.code;
+    document.getElementById("result").innerText = "Scanned Code: " + code;
+    Quagga.stop();
+  });
+</script>
 
 </body>
 </html>
