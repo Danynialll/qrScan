@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Code 39 Scanner</title>
+  <title>Code 128 Scanner</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
   <style>
     #scanner-container {
@@ -27,7 +27,7 @@
 <body>
 
 <div id="scanner-container">
-  <h2>Code 39 Barcode Scanner</h2>
+  <h2>Code 128 Barcode Scanner</h2>
   <div id="scanner"></div>
   <div id="result">Waiting for scan...</div>
 </div>
@@ -44,7 +44,7 @@
       },
     },
     decoder: {
-      readers: ["code_39_reader"] // Use Code 39
+      readers: ["code_128_reader"] // Use Code 39
     }
   }, function (err) {
     if (err) {
